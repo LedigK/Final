@@ -1,0 +1,56 @@
+1.	Write a SQL query that retrieves all languages that occur in more than 1000 Webpages. A language "occurs" in a Webpage if the Webpage contains a word in that language.
+
+select y.language
+ from Occurs x, Dictionary y 
+where x.word = y.word 
+group by y.language 
+having count(*) > 1000 
+
+
+2.	Write a SQL query that computes, for each Webpage, the largest number of words on that page in any language. For example, if a page has 100 words in French and 50 words in English (these two sets of words may be overlapping), then your query will return 100 for that page. If a Webpage has only words that do not occur in any language at all, then you do not need to return that Webpage.
+
+select url, max(c) 
+from (select x.url, y.language, count(*) as c 
+from Occur x, Dictionary y 
+where x.word = y.word 
+group by x.url, y.language) 
+group by url
+
+
+3.	Design an ERM Diagram for an online video rental company: !PDF GIVEN!
+     • The company has data about movies, customers, rentals, reviewers, reviews.
+     • A Movie has a Title (key), Year, and Duration.
+     • A Customer has Name, Email (key), and Credit.
+     • Customers rent movies; they may rent many movies, and a movie may be rented by many; each Rental has a Date.
+     • A Reviewer is a Customer, and has a Reputation attribute.
+     • A Review has a Rating, a Date, and Text (content). Each review is uniquely identified by the movie it is reviewing, and by the reviewer who wrote it. 
+
+
+4.	Add a view containing a sub-query to our Movie database. 
+CREATE VIEW Movie_years AS
+SELECT name, year
+FROM Movie
+WHERE year < 2015
+ORDER BY year DESC
+
+
+5.	Add a trigger to our Movie database. 
+CREATE TRIGGER delete_movie
+AFTER DELETE ON Movie 
+FOR EACH ROW 
+BEGIN
+DELETE FROM Movie 
+WHERE movie.id = OLD.id;
+END
+
+
+6.	Add a common table expression to our Movie database. 
+WITH test1(name, year)
+AS 
+(SELECT earnings_rank, rating, runtime
+FROM Movie
+WHERE (name = 'Incredibles 2'))
+SELECT earnings_rank, rating, runtime
+FROM Movie
+WHERE (name = 'Incredibles 2')
+
